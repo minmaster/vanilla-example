@@ -1,0 +1,152 @@
+<html>
+    <head>
+        <style>
+
+            body {
+                font-family: Verdana, sans-serif;
+            }
+
+
+            input {
+                border: 1px solid black;
+                height: 30px;
+                padding: 0 5px;
+                line-height: 30px;
+                width: 100%;
+                font-family: Verdana, sans-serif;
+            }
+
+            input:focus {
+                outline: 0;
+            }
+
+            input.error {
+                border-color: red;
+                color: red;
+            }
+
+            .field {
+                padding: 5px;
+            }
+
+            .buttons {
+                padding: 5px;
+            }
+
+            button {
+                border: 0;
+                background: black;
+                color: white;
+                width: 100%;
+                font-weight: bold;
+                padding: 10px 0;
+                font-size: 12px;
+                font-family: Verdana, sans-serif;
+                cursor: pointer;
+
+            }
+
+            p.error {
+                color: red;
+                margin: 0;
+                padding: 5px 0 0 0;
+                font-size: 9px;
+            }
+
+            .message {
+                border: 1px solid black;
+                text-align: center;
+                margin: 100 20px;
+                padding: 20px;
+                font-size: 12px;
+                display: none;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <form name="contact" method="post" action="">
+
+            <div class="field">
+                <input type="text" name="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="field">
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="field">
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="field">
+                <input type="password" name="repeatPassword" placeholder="Enter your password">
+            </div>
+
+            <div class="buttons">
+                <button>Send</button>
+            </div>
+
+        </form>
+
+        <div class="message">
+            Form submitted successfully
+        </div>
+
+        <script>
+            document.querySelector('button').addEventListener('click', function(e) {
+                if (checkForm()) {
+                    document.querySelector('form').style.display = 'none';
+                    document.querySelector('.message').style.display = 'block';
+                };
+                e.preventDefault();
+            })
+
+            var checkForm = function() {
+
+                var inputs = document.querySelectorAll('input');
+                var inputEmail = document.querySelector('input[name="email"]');
+                var inputPassword = document.querySelector('input[name="password"]');
+                var inputRepeatPassword = document.querySelector('input[name="repeatPassword"]');
+                var validate = true;
+
+                for (var i = 0; i < inputs.length; i++) {
+
+                    if (inputs[i].nextElementSibling) {
+                        inputs[i].parentNode.removeChild(inputs[i].nextElementSibling);
+                    }
+
+                    if (!inputs[i].value && inputs[i].required) {
+                        inputs[i].insertAdjacentHTML('afterend', '<p class="error">Field required</p>');
+                        inputs[i].classList.add('error');
+                        validate = false;
+                    } else {
+                        inputs[i].classList.remove('error');
+                    }
+
+                }
+
+                if (inputPassword.value != inputRepeatPassword.value) {
+                    inputRepeatPassword.insertAdjacentHTML('afterend', '<p class="error">The password and repeat password fields do not match</p>');
+                    inputRepeatPassword.classList.add('error');
+                    validate = false;
+                }
+
+                if (!validateEmail(inputEmail.value) && inputEmail.value) {
+                    inputEmail.insertAdjacentHTML('afterend', '<p class="error">The email format is not correct</p>');
+                    inputEmail.classList.add('error');
+                    validate = false;
+                }
+
+                return validate;
+
+            }
+
+            function validateEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            }
+        </script>
+    </body>
+</html>
